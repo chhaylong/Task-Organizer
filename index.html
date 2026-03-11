@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TASKFLOW — Task Manager</title>
+
+  <!-- ① Styles -->
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ── HEADER ── -->
+  <header>
+    <div class="logo">
+      <h1>TASKFLOW</h1>
+      <p>// persistent task organiser</p>
+    </div>
+    <div class="header-stats">
+      <div class="stat-item">
+        <div class="stat-item__num" id="statTotal">0</div>
+        <div class="stat-item__label">Total</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-item__num" id="statDone">0</div>
+        <div class="stat-item__label">Done</div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <div class="stat-item__num" id="statOverdue" style="color:var(--accent)">0</div>
+        <div class="stat-item__label">Overdue</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── PROGRESS ── -->
+  <div class="progress">
+    <div class="progress__header">
+      <span class="progress__label">// completion progress</span>
+      <span class="progress__pct" id="progressPct">0%</span>
+    </div>
+    <div class="progress__track">
+      <div class="progress__fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- ── TOOLBAR ── -->
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg class="search-wrap__icon" width="16" height="16" fill="none"
+           stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+      </svg>
+      <input type="search" id="searchInput" placeholder="Search tasks…"/>
+    </div>
+
+    <div class="filter-group" id="filterGroup">
+      <button class="filter-btn filter-btn--active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="todo">To-Do</button>
+      <button class="filter-btn" data-filter="inprogress">In Progress</button>
+      <button class="filter-btn" data-filter="done">Done</button>
+    </div>
+
+    <select id="sortSelect"></select>
+
+    <button id="newTaskBtn">＋ NEW TASK</button>
+  </div>
+
+  <!-- ── KANBAN COLUMNS (built by UI.buildColumns()) ── -->
+  <div id="columnsWrap"></div>
+
+</div><!-- /.app -->
+
+
+<!-- ── TASK MODAL ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal__header">
+      <span class="modal__title" id="modalTitle">NEW TASK</span>
+      <button class="modal__close" id="modalCancelBtn">✕</button>
+    </div>
+
+    <!-- Hidden: stores the task ID when editing -->
+    <input type="hidden" id="modalTaskId"/>
+
+    <div class="field">
+      <label for="fTitle">Task Title *</label>
+      <input type="text" id="fTitle" placeholder="What needs to be done?" maxlength="100"/>
+    </div>
+
+    <div class="field">
+      <label for="fDesc">Description</label>
+      <textarea id="fDesc" placeholder="Add notes or context…"></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="fPriority">Priority</label>
+        <select id="fPriority">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="fStatus">Status</label>
+        <select id="fStatus">
+          <option value="todo">To-Do</option>
+          <option value="inprogress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="fDue">Due Date</label>
+      <input type="date" id="fDue"/>
+    </div>
+
+    <div class="modal__actions">
+      <button class="btn btn--cancel" id="modalCancelBtn2">CANCEL</button>
+      <button class="btn btn--save"   id="modalSaveBtn">SAVE TASK</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── DELETE CONFIRM ── -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <h3>DELETE TASK</h3>
+    <p>This action cannot be undone.</p>
+    <div class="confirm-box__btns">
+      <button class="btn btn--cancel" id="confirmCancelBtn" style="padding:12px">CANCEL</button>
+      <button class="btn btn--save"   id="confirmDeleteBtn"
+              style="padding:12px;background:var(--accent)">DELETE</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ── TOAST CONTAINER ── -->
+<div id="toastContainer"></div>
+
+
+<!--
+  ② Scripts — ORDER MATTERS
+  config  → utils → storage → ui → app
+-->
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
